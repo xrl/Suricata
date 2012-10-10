@@ -2,6 +2,6 @@ language: cpp
 compiler:
   - gcc
 before_script:
-  - rake build:all
+  - rake build:all --trace
   - ./autogen.sh && ./configure --enable-unittests
 script: make
