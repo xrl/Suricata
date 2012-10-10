@@ -1,0 +1,6 @@
+language: cpp
+compiler:
+  - gcc
+before_script:
+  - ./configure --enable-unittests
+script: make
