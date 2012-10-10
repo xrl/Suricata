@@ -2,5 +2,5 @@ language: cpp
 compiler:
   - gcc
 before_script:
-  - ./configure --enable-unittests
+  - ./autogen.sh && ./configure --enable-unittests
 script: make
