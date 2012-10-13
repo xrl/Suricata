@@ -15,7 +15,7 @@ namespace "build" do
   task :libnet do
     tarball = "https://github.com/xrl/libnet/zipball/libnet-1.1.6-rc4"
     `wget #{tarball} -O libnet.tar.gz`
-    `tar xzf libnet.tar.gz`
+    `unzip libnet.tar.gz`
     Dir.chdir Dir.glob("*xrl-libnet*/libnet").first
     `./autogen.sh && ./configure --prefix=#{@build} && make && make install`
   end
