@@ -7,5 +7,5 @@ compiler:
 before_script:
   - rake build:all --trace
   - ./autogen.sh
-  - ./configure --enable-unittests CPPFLAGS="-Ibuild/include" LDFLAGS="-Lbuild/lib/"
+  - CPPFLAGS="-Ibuild/include" LDFLAGS="-Lbuild/lib/" ./configure --enable-unittests
 script: make
