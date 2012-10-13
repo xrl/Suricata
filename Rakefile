@@ -1,9 +1,16 @@
 require 'open-uri'
 require 'logger'
 
+MANIFEST = {
+  :libnet => {
+    :url => "https://github.com/xrl/libnet/zipball/libnet-1.1.6-rc4",
+    :filename => "libnet.zip"
+  }
+}
+
 namespace "build" do
   desc "Build all necessary dependencies"
-  task :all => [:environment,:libnet]
+  task :all => [:environment,:download,:libnet]
 
   task :environment do
     @root = Dir.pwd
@@ -14,13 +21,17 @@ namespace "build" do
     @logger.level = Logger::INFO
   end
 
+  task :download do
+    MANIFEST.each do |name,details|
+      @logger.info "Downloading #{name}"
+      `wget #{details[:url]} -O #{details[:filename]}`
+    end
+  end
+
   desc ""
   task :libnet do
-    @logger.info "Downloading libnet"
-    tarball = "https://github.com/xrl/libnet/zipball/libnet-1.1.6-rc4"
-    `wget #{tarball} -O libnet.tar.gz`
     @logger.info "Building libnet"
-    `unzip -F libnet.tar.gz`
+    `unzip -o #{MANIFEST[:libnet][:filename]}`
     Dir.chdir Dir.glob("*xrl-libnet*/libnet").first
     `./autogen.sh && ./configure --prefix=#{@build} && make && make install`
   end
