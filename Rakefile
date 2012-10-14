@@ -5,12 +5,16 @@ MANIFEST = {
   :libnet => {
     :url => "https://github.com/xrl/libnet/zipball/libnet-1.1.6-rc4",
     :filename => "libnet.zip"
+  },
+  :libpcap => {
+    :url => "http://www.tcpdump.org/release/libpcap-1.3.0.tar.gz",
+    :filename => "libpcap-1.3.0.tar.gz"
   }
 }
 
 namespace "build" do
   desc "Build all necessary dependencies"
-  task :all => [:environment,:download,:libnet]
+  task :all => [:environment,:download,:libnet,:libpcap]
 
   task :environment do
     @root = Dir.pwd
@@ -32,7 +36,15 @@ namespace "build" do
   task :libnet do
     @logger.info "Building libnet"
     `unzip -o #{MANIFEST[:libnet][:filename]}`
-    Dir.chdir Dir.glob("*xrl-libnet*/libnet").first
+    Dir.chdir @build+Dir.glob("*xrl-libnet*/libnet").first
     `./autogen.sh && ./configure --prefix=#{@build} && make && make install`
+  end
+
+  task :libpcap => [:environment,:download] do
+    @logger.info "Building libpcap"
+    `tar xzf #{MANIFEST[:libpcap][:filename]}`
+    Dir.chdir @build + "/" + MANIFEST[:libpcap][:filename].gsub(".tar.gz","")
+    `./configure --prefix=#{@build}`
+    `make && make install`
   end
 end
