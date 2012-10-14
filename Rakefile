@@ -35,6 +35,8 @@ namespace "build" do
   desc ""
   task :libnet do
     @logger.info "Building libnet"
+    Dir.chdir @build
+    
     `unzip -o #{MANIFEST[:libnet][:filename]}`
     Dir.chdir @build + "/" + Dir.glob("*xrl-libnet*/libnet").first
     `./autogen.sh && ./configure --prefix=#{@build} && make && make install`
@@ -42,8 +44,11 @@ namespace "build" do
 
   task :libpcap => [:environment,:download] do
     @logger.info "Building libpcap"
+    Dir.chdir @build
+
     `tar xzf #{MANIFEST[:libpcap][:filename]}`
-    Dir.chdir @build + "/" + MANIFEST[:libpcap][:filename].gsub(".tar.gz","")
+    target = @build + "/" + MANIFEST[:libpcap][:filename].gsub(".tar.gz","")
+    Dir.chdir target
     `./configure --prefix=#{@build}`
     `make && make install`
   end
