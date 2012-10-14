@@ -36,7 +36,7 @@ namespace "build" do
   task :libnet do
     @logger.info "Building libnet"
     `unzip -o #{MANIFEST[:libnet][:filename]}`
-    Dir.chdir @build+Dir.glob("*xrl-libnet*/libnet").first
+    Dir.chdir @build + "/" + Dir.glob("*xrl-libnet*/libnet").first
     `./autogen.sh && ./configure --prefix=#{@build} && make && make install`
   end
 
