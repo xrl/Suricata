@@ -9,12 +9,18 @@ MANIFEST = {
   :libpcap => {
     :url => "http://www.tcpdump.org/release/libpcap-1.3.0.tar.gz",
     :filename => "libpcap-1.3.0.tar.gz"
+  },
+  :libmagic => {
+    :url => "http://voxel.dl.sourceforge.net/project/libmagic/libmagic/ALPHA/libmagic-alpha.tar.gz",
+    :filename => "libmagic-alpha.tar.gz"
   }
 }
 
+PACKAGES = %w{ libnet1 libnet1-dev libpcap0.8 libpcap-dev libmagic-dev }
+
 namespace "build" do
   desc "Build all necessary dependencies"
-  task :all => [:environment,:download,:libnet,:libpcap]
+  task :all => [:environment,:packages]
 
   task :environment do
     @root = Dir.pwd
@@ -23,6 +29,13 @@ namespace "build" do
     Dir.chdir(@build)
     @logger = Logger.new($stdout)
     @logger.level = Logger::INFO
+  end
+
+  task :packages do
+    `aptitude download #{packages.join(' ')}`
+    Dir.glob("*.deb").each do |pkg_name|
+      `dpkg-deb -x #{pkg_name} .`
+    end
   end
 
   task :download do
@@ -36,7 +49,7 @@ namespace "build" do
   task :libnet do
     @logger.info "Building libnet"
     Dir.chdir @build
-    
+
     `unzip -o #{MANIFEST[:libnet][:filename]}`
     Dir.chdir @build + "/" + Dir.glob("*xrl-libnet*/libnet").first
     `./autogen.sh && ./configure --prefix=#{@build} && make && make install`
@@ -51,5 +64,9 @@ namespace "build" do
     Dir.chdir target
     `./configure --prefix=#{@build}`
     `make && make install`
+  end
+
+  task :libmagic => [:environment, :download] do
+
   end
 end

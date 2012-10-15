@@ -7,5 +7,5 @@ compiler:
 before_script:
   - rake build:all --trace
   - ./autogen.sh
-  - ./configure --with-libnet-includes=build/include --with-libnet-libraries=build/lib --enable-unittests
+  - ./configure --with-libnet-includes=build/usr/include --with-libnet-libraries=build/usr/lib --enable-unittests
 script: make
