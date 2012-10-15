@@ -1,6 +1,7 @@
 branches:
   only:
     - travis
+    - travis-deb
 language: cpp
 compiler:
   - gcc
