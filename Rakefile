@@ -32,8 +32,10 @@ namespace "build" do
   end
 
   task :packages do
+    @logger.info "Downloading packages"
     `aptitude download #{PACKAGES.join(' ')}`
     Dir.glob("*.deb").each do |pkg_name|
+      @logger.info "Unpacking #{pkg_name}"
       `dpkg-deb -x #{pkg_name} .`
     end
   end
