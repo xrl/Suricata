@@ -38,37 +38,6 @@ namespace "build" do
       @logger.info "Unpacking #{pkg_name}"
       `dpkg-deb -x #{pkg_name} .`
     end
-  end
-
-  task :download do
-    MANIFEST.each do |name,details|
-      @logger.info "Downloading #{name}"
-      `wget #{details[:url]} -O #{details[:filename]}`
-    end
-  end
-
-  desc ""
-  task :libnet do
-    @logger.info "Building libnet"
-    Dir.chdir @build
-
-    `unzip -o #{MANIFEST[:libnet][:filename]}`
-    Dir.chdir @build + "/" + Dir.glob("*xrl-libnet*/libnet").first
-    `./autogen.sh && ./configure --prefix=#{@build} && make && make install`
-  end
-
-  task :libpcap => [:environment,:download] do
-    @logger.info "Building libpcap"
-    Dir.chdir @build
-
-    `tar xzf #{MANIFEST[:libpcap][:filename]}`
-    target = @build + "/" + MANIFEST[:libpcap][:filename].gsub(".tar.gz","")
-    Dir.chdir target
-    `./configure --prefix=#{@build}`
-    `make && make install`
-  end
-
-  task :libmagic => [:environment, :download] do
-
+    @logger.info Dir.glob("*/**").inspect
   end
 end
