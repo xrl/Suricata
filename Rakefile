@@ -32,7 +32,7 @@ namespace "build" do
   end
 
   task :packages do
-    `aptitude download #{packages.join(' ')}`
+    `aptitude download #{PACKAGES.join(' ')}`
     Dir.glob("*.deb").each do |pkg_name|
       `dpkg-deb -x #{pkg_name} .`
     end
